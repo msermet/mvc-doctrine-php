@@ -29,10 +29,20 @@ switch ($route) {
         $livreController->list();
         break;
     case "livre-details" :
+        $id_details = $_GET['id_details'] ?? null;
+        if ($id_details) {
+            $livreDao = new \App\Dao\LivreDAO($db);
+            $livreController = new \App\Controllers\LivreController($livreDao);
+            $livreController->details($id_details);
+        } else {
+            echo "La requête n'est pas valide";
+            break;
+        }
+        break;
+    case "livre-creer" :
         $livreDao = new \App\Dao\LivreDAO($db);
         $livreController = new \App\Controllers\LivreController($livreDao);
-        $livreController->details();
-        break;
+        $livreController->creer();
     default :
         // Error 404
         echo "Page non trouvée";

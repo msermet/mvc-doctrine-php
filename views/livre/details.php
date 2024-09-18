@@ -10,9 +10,10 @@
 <body>
 <h1>Détails</h1>
 <ul>
-    <?php foreach ($livres as $livre) : ?>
-        <li><?=$livre->getTitre() ?></li>
-    <?php endforeach; ?>
+        <li>Titre du film : <?= $livre->getTitre() ?></li>
+        <li>Id du film : <?= $livre->getId() ?></li>
+        <li>Auteur du film : <?= $livre->getAuteur() ?></li>
+        <li>Nombres de pages : <?= $livre->getNbPages() ?></li>
 </ul>
 <a href="index.php">Accueil</a>
 

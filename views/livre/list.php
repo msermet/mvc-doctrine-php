@@ -11,10 +11,11 @@
     <h1>Liste des livres</h1>
     <ul>
         <?php foreach ($livres as $livre) : ?>
-            <li><?=$livre->getTitre() ?> <a href="index.php?route=livre-details>">details</a></li>
+            <li><?=$livre->getTitre() ?> <a href="index.php?route=livre-details&id_details=<?=$livre->getId()?>">details</a></li>
         <?php endforeach; ?>
     </ul>
     <a href="index.php">Accueil</a>
+    <a href="index.php?route=livre-creer">Créer un livre</a>
 
 </body>
 </html>

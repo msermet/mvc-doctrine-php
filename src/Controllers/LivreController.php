@@ -24,15 +24,18 @@ class LivreController
         require __DIR__ . '/../../views/livre/list.php';
     }
 
-    public function details()
+    public function details(int $id_details)
     {
+            $livre = $this->livreDao->selectDetails($id_details);
+            if ($livre) {
+                require __DIR__ . '/../../views/livre/details.php';
+            } else {
+                //header("HTTP/1.0 404 Not Found");
+                echo "Livre non trouvé";
+            }
+    }
 
-        $id_details = null;
-        if (isset($_GET['id_details'])) {
-            $id_details = filter_var($_GET['id_details'], FILTER_VALIDATE_INT);
-            $livres = $this->livreDao->selectDetails($id_details);
-
-            require __DIR__ . '/../../views/livre/details.php';
-        }
+    public function creer() {
+        require  __DIR__ . '/../../views/livre/formulaire.php';
     }
 }
