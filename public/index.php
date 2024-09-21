@@ -43,6 +43,7 @@ switch ($route) {
         $livreDao = new \App\Dao\LivreDAO($db);
         $livreController = new \App\Controllers\LivreController($livreDao);
         $livreController->creer();
+        break;
     default :
         // Error 404
         echo "Page non trouvée";

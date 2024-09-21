@@ -36,6 +36,33 @@ class LivreController
     }
 
     public function creer() {
+        $erreurs = [];
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Récupération des données
+            $titre_livre = $_POST['titre_livre'] ?? '';
+            $nombre_pages_livre = $_POST['nombre_pages_livre'] ?? '';
+            $auteur_livre = $_POST['auteur_livre'] ?? '';
+
+            // Validation des données
+            if (empty($titre_livre)) {
+                $erreurs['titre_livre'] = "Le titre est obligatoire";
+            }
+            if (empty($nombre_pages_livre)) {
+                $erreurs['nombre_pages_livre'] = "Le nombre de pages est obligatoire";
+            }
+            if (empty($auteur_livre)) {
+                $erreurs['auteur_livre'] = "L'auteur est obligatoire";
+            }
+
+            // Si pas d'erreurs, créer le livre
+            if (empty($erreurs)) {
+                $this->livreDao->creerLivre($titre_livre, $nombre_pages_livre, $auteur_livre);
+                header("Location: /index.php");
+                exit();
+            }
+        }
+
         require  __DIR__ . '/../../views/livre/formulaire.php';
     }
 }
