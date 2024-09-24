@@ -22,17 +22,13 @@ switch ($route) {
         $accueilController->accueil();
         break;
     case 'livre-list' :
-        // $livreDao est une dépendance de LivreController
-        $livreDao = new \App\Dao\LivreDAO($db);
-        // Injecter la dépendance $livreDao dans l'objet LivreController
-        $livreController = new \App\Controllers\LivreController($livreDao);
+        $livreController = new \App\Controllers\LivreController();
         $livreController->list();
         break;
     case "livre-details" :
         $id_details = $_GET['id_details'] ?? null;
         if ($id_details) {
-            $livreDao = new \App\Dao\LivreDAO($db);
-            $livreController = new \App\Controllers\LivreController($livreDao);
+            $livreController = new \App\Controllers\LivreController();
             $livreController->details($id_details);
         } else {
             echo "La requête n'est pas valide";
@@ -40,8 +36,7 @@ switch ($route) {
         }
         break;
     case "livre-creer" :
-        $livreDao = new \App\Dao\LivreDAO($db);
-        $livreController = new \App\Controllers\LivreController($livreDao);
+        $livreController = new \App\Controllers\LivreController();
         $livreController->creer();
         break;
     default :

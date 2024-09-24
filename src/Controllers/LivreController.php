@@ -2,40 +2,58 @@
 
 namespace App\Controllers;
 
-use App\Dao\LivreDAO;
+
+// Récupérer l'EntityManager
+/**
+ * @var \Doctrine\ORM\EntityManager $entityManager
+ */
+
+use App\Entity\Livre;
+use Doctrine\ORM\EntityManager;
+
 
 class LivreController
 {
-    private LivreDAO $livreDao; // Dépendance
-
-    public function __construct(LivreDAO $dao)
-    {
-        $this->livreDao = $dao;
-    }
 
     // Lister l'ensemble des livres
 
     public function list()
     {
-        // Fait appel au modèle afin de récupérer les données dans la BDD
-        $livres = $this->livreDao->selectAll();
-
+        // Récupérer l'EntityManager
+        /**
+         * @var \Doctrine\ORM\EntityManager $entityManager
+         */
+        $entityManager = require_once __DIR__.'/../../config/bootstrap.php';
+        $livreRepository = $entityManager->getRepository(\App\Entity\Livre::class);
+        $livres = $livreRepository->findAll();
         // Fait appel à la vue afin de renvoyer la page
         require __DIR__ . '/../../views/livre/list.php';
     }
 
     public function details(int $id_details)
     {
-            $livre = $this->livreDao->selectDetails($id_details);
-            if ($livre) {
-                require __DIR__ . '/../../views/livre/details.php';
-            } else {
-                //header("HTTP/1.0 404 Not Found");
-                echo "Livre non trouvé";
-            }
+        // Récupérer l'EntityManager
+        /**
+         * @var \Doctrine\ORM\EntityManager $entityManager
+         */
+        $entityManager = require_once __DIR__.'/../../config/bootstrap.php';
+        $livreRepository = $entityManager->getRepository(\App\Entity\Livre::class);
+        $livre = $livreRepository->find($id_details);
+        if ($livre) {
+            require __DIR__ . '/../../views/livre/details.php';
+        } else {
+            //header("HTTP/1.0 404 Not Found");
+            echo "Livre non trouvé";
+        }
     }
 
     public function creer() {
+        // Récupérer l'EntityManager
+        /**
+         * @var \Doctrine\ORM\EntityManager $entityManager
+         */
+        $entityManager = require_once __DIR__.'/../../config/bootstrap.php';
+
         $erreurs = [];
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -57,7 +75,12 @@ class LivreController
 
             // Si pas d'erreurs, créer le livre
             if (empty($erreurs)) {
-                $this->livreDao->creerLivre($titre_livre, $nombre_pages_livre, $auteur_livre);
+                $livre = new Livre();
+                $livre->setTitre($titre_livre);
+                $livre->setAuteur($auteur_livre);
+                $livre->setNbPages($nombre_pages_livre);
+                $entityManager->persist($livre);
+                $entityManager->flush();
                 header("Location: /index.php");
                 exit();
             }

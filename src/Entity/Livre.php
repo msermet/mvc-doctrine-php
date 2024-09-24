@@ -1,14 +1,20 @@
 <?php
 
 namespace App\Entity;
-
-// Cette classe représente une entité (table liée dans la BDD)
+use Doctrine\ORM\Mapping as ORM;
+#[ORM\Entity]
+#[ORM\Table(name: "livres")]
 class Livre
 {
-
+    #[ORM\Id]   // Clé primaire dans la table livres
+    #[ORM\Column(name: 'id_livre', type: 'integer')]
+    #[ORM\GeneratedValue]
     private int $id;
+    #[ORM\Column(name: 'titre_livre',type: 'string',length: 100,nullable: false)]
     private string $titre;
+    #[ORM\Column(name: 'auteur_livre',type: 'string',length: 100,nullable: false)]
     private string $auteur;
+    #[ORM\Column(name: 'nombre_pages_livre', type: 'integer')]
     private int $nbPages;
 
     /**
