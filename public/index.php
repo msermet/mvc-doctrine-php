@@ -1,5 +1,11 @@
 <?php
 
+// Récupérer l'EntityManager
+/**
+ * @var \Doctrine\ORM\EntityManager $entityManager
+ */
+$entityManager = require_once __DIR__.'/../config/bootstrap.php';
+
 // Controller FRONTAL => Router
 // Toutes les requêtes des utilisateurs passent par ce fichier
 
@@ -22,13 +28,13 @@ switch ($route) {
         $accueilController->accueil();
         break;
     case 'livre-list' :
-        $livreController = new \App\Controllers\LivreController();
+        $livreController = new \App\Controllers\LivreController($entityManager);
         $livreController->list();
         break;
     case "livre-details" :
         $id_details = $_GET['id_details'] ?? null;
         if ($id_details) {
-            $livreController = new \App\Controllers\LivreController();
+            $livreController = new \App\Controllers\LivreController($entityManager);
             $livreController->details($id_details);
         } else {
             echo "La requête n'est pas valide";
@@ -36,7 +42,7 @@ switch ($route) {
         }
         break;
     case "livre-creer" :
-        $livreController = new \App\Controllers\LivreController();
+        $livreController = new \App\Controllers\LivreController($entityManager);
         $livreController->creer();
         break;
     default :

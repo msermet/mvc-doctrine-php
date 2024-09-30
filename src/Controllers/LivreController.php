@@ -2,29 +2,26 @@
 
 namespace App\Controllers;
 
-
-// Récupérer l'EntityManager
-/**
- * @var \Doctrine\ORM\EntityManager $entityManager
- */
-
 use App\Entity\Livre;
 use Doctrine\ORM\EntityManager;
 
 
 class LivreController
 {
+    private EntityManager $entityManager;
 
-    // Lister l'ensemble des livres
+
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     public function list()
     {
-        // Récupérer l'EntityManager
-        /**
-         * @var \Doctrine\ORM\EntityManager $entityManager
-         */
-        $entityManager = require_once __DIR__.'/../../config/bootstrap.php';
-        $livreRepository = $entityManager->getRepository(\App\Entity\Livre::class);
+        $livreRepository = $this->entityManager->getRepository(\App\Entity\Livre::class);
         $livres = $livreRepository->findAll();
         // Fait appel à la vue afin de renvoyer la page
         require __DIR__ . '/../../views/livre/list.php';
@@ -32,12 +29,7 @@ class LivreController
 
     public function details(int $id_details)
     {
-        // Récupérer l'EntityManager
-        /**
-         * @var \Doctrine\ORM\EntityManager $entityManager
-         */
-        $entityManager = require_once __DIR__.'/../../config/bootstrap.php';
-        $livreRepository = $entityManager->getRepository(\App\Entity\Livre::class);
+        $livreRepository = $this->entityManager->getRepository(\App\Entity\Livre::class);
         $livre = $livreRepository->find($id_details);
         if ($livre) {
             require __DIR__ . '/../../views/livre/details.php';
@@ -48,11 +40,6 @@ class LivreController
     }
 
     public function creer() {
-        // Récupérer l'EntityManager
-        /**
-         * @var \Doctrine\ORM\EntityManager $entityManager
-         */
-        $entityManager = require_once __DIR__.'/../../config/bootstrap.php';
 
         $erreurs = [];
 
@@ -79,8 +66,8 @@ class LivreController
                 $livre->setTitre($titre_livre);
                 $livre->setAuteur($auteur_livre);
                 $livre->setNbPages($nombre_pages_livre);
-                $entityManager->persist($livre);
-                $entityManager->flush();
+                $this->entityManager->persist($livre);
+                $this->entityManager->flush();
                 header("Location: /index.php");
                 exit();
             }
